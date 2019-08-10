@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/apporoad/LiSA.sync/issues"
   },
-  "homepage": "https://github.com/apporoad/LiSA.sync#readme"
+  "homepage": "https://github.com/apporoad/LiSA.sync#readme",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "lisa.utils": "^1.0.0"
+  }
 }
