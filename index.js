@@ -1,28 +1,38 @@
 const debug = require('debug')('LiSA.sync')
 const utils = require('lisa.utils')
+const orbit = require("lisa.orbit")
+const io = require('./io')
 
 global.LiSASYNC = global.LiSASYNC || {};
 var map = global.LiSASYNC 
 
-function Sync(D){
+function Sync(D,options){
+    options = options || {}
     var _this = this
     var _d = D
     var _data = null
     var _initFlag = false
-    var _syncReader = null
-    var _reader = null
-    var _writer = null
+    //var _syncReader = null
+    //var _reader = null
+    //var _writer = null
+    var _adapter = null
 
-
-    //todo auto load reader and writer
+    //use orbit
+    orbit.setOrbit(_adapter.getName(_d),null,mina=>{
+        if(_adapter._writer)
+            _adapter._writer(_d,_data)
+        else{
+            console.error("LiSA.sync  you should set Writer")
+        }
+    },_d,options.internal)
 
     this.get = ()=>{
         return new Promise((r,j)=>{
             if(_initFlag){
                 r(_data)
             }else{
-                if(_reader){
-                    var result = _reader(_d)
+                if(_adapter._reader){
+                    var result = _adapter._reader(_d)
                     if(result && result.then){
                         result.then(data=>{
                             _data = data
@@ -48,19 +58,21 @@ function Sync(D){
             value.then(data=>{
                 _data = data
                 _initFlag = true
-                //todo into the orbit
+                //into the orbit
+                orbit.push(_adapter.getName(_d))
             })
         }
         else{
             _data = value
             _initFlag = true
-            //todo into the orbit
+            //into the orbit
+            orbit.push(_adapter.getName(_d))
         }
     }
     this.getSync =()=>{
         if(!_initFlag) {
-            if(_syncReader){
-                _data = _syncReader(_d)
+            if(_adapter._syncReader){
+                _data = _adapter._syncReader(_d)
                 _initFlag = true
             }
             else{
@@ -84,26 +96,20 @@ function Sync(D){
         }
     }
 
-    this.setSyncReader = reader=>{ 
-        //todo many validate
-        _this._syncReader = reader
-    }
-    this.setReader = reader=>{ 
-        //todo many validate
-        _this._reader = reader
-    }
-    this.setWriter = writer=>{ 
-        //todo many validate
-        _this._writer = writer
+    this.setAdapter = adapter=>{
+        //todo validate
+        _this._adapter = adapter
     }
 }
 
 
 
-module.exports =(D)=>{
-    //todo D maybe a json
-    if(!map[D]){
-        map[D] = new Sync(D) 
+module.exports =(D,options)=>{
+    var adapter = io.getAdapter(D)
+    if(!map[adapter.getName(D)]){
+         var sync = new Sync(D,options) 
+         sync.setAdapter = adapter
+         map[adapter.getName(D)] = sync
     }
-    return map[D]
+    return map[adapter.getName(D)]
 }

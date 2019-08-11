@@ -2,3 +2,18 @@
 
 # LiSA.sync
 sync framework for node
+
+## use
+```js
+
+```
+
+## an adapter maybe
+```js
+function Adapter(){
+    this.getName = (D)=>{}
+    this.syncReader = (D) =>{}
+    this.reader = (D)=>{}
+    this.writer = (D,data)=>{}
+}
+```
