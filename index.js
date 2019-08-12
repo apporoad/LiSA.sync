@@ -17,14 +17,7 @@ function Sync(D,options){
     //var _writer = null
     var _adapter = null
 
-    //use orbit
-    orbit.setOrbit(_adapter.getName(_d),null,mina=>{
-        if(_adapter._writer)
-            _adapter._writer(_d,_data)
-        else{
-            console.error("LiSA.sync  you should set Writer")
-        }
-    },_d,options.internal)
+    
 
     this.get = ()=>{
         return new Promise((r,j)=>{
@@ -100,6 +93,16 @@ function Sync(D,options){
         //todo validate
         _this._adapter = adapter
     }
+
+
+    //use orbit
+    orbit.setOrbit(_adapter.getName(_d),null,mina=>{
+        if(_adapter._writer)
+            _adapter._writer(_d,_data)
+        else{
+            console.error("LiSA.sync  you should set Writer")
+        }
+    },_d,options.internal)
 }
 
 

@@ -1,8 +1,7 @@
 const utils = require('lisa.utils')
 const fs = require('fs')
 
-
-module.exports = function(){
+var adapter = function(){
     this.getName=D=>{
         return D
     }
@@ -41,3 +40,5 @@ module.exports = function(){
         fs.writeFile(D,content)
     }
 }
+
+module.exports = new adapter()
