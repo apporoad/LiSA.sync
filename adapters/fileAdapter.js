@@ -1,15 +1,30 @@
 const utils = require('lisa.utils')
 const fs = require('fs')
+const mkdirp = require('mkdirp')
+const path = require('path')
+
+var wr = (p,content)=>{
+    fs.writeFile(p, content, { encoding:"utf8" }, function(err) {
+        if (err) {
+            console.error("LiSA.sync fileAdapter : " + err)
+        }
+    })
+}
 
 var adapter = function(){
     this.getName=D=>{
-        return D
+        return D.replace(/\\/g,'/')
     }
 
     this.syncReader = (D) =>{
         var content = fs.readFileSync(D,{encoding:"utf8"})
-        if(utils.endWith(D,".json")){
-            return JSON.parse(content)
+        if(utils.endWith(D,".json") && content){
+            try{
+                return JSON.parse(content)
+            }
+            catch(e){
+                return {}
+            }
         }
         else 
             return content
@@ -37,7 +52,20 @@ var adapter = function(){
         }else{
             content = JSON.stringify(data)
         }
-        fs.writeFile(D,content)
+
+        if(!fs.existsSync(path.dirname(D))){
+            mkdirp(path.dirname(D), function (err) {
+                if (err) 
+                    console.error("LiSA.sync fileAdapter : " + err)
+                else 
+                    wr(D,content)
+            });
+        }
+        else{
+            wr(D,content)
+        }
+
+       
     }
 }
 

@@ -8,6 +8,7 @@ var map = global.LiSASYNC
 
 function Sync(D,options){
     options = options || {}
+    options.internal = options.internal || 2000
     var _this = this
     var _d = D
     var _data = null
@@ -24,8 +25,8 @@ function Sync(D,options){
             if(_initFlag){
                 r(_data)
             }else{
-                if(_adapter._reader){
-                    var result = _adapter._reader(_d)
+                if(_this._adapter.reader){
+                    var result = _this._adapter.reader(_d)
                     if(result && result.then){
                         result.then(data=>{
                             _data = data
@@ -52,20 +53,24 @@ function Sync(D,options){
                 _data = data
                 _initFlag = true
                 //into the orbit
-                orbit.push(_adapter.getName(_d))
+                orbit.push(_this._adapter.getName(_d))
             })
         }
         else{
             _data = value
             _initFlag = true
             //into the orbit
-            orbit.push(_adapter.getName(_d))
+            orbit.push(_this._adapter.getName(_d))
         }
     }
+    this.stop = () => {
+        orbit.stop(_this._adapter.getName(_d))
+    }
+
     this.getSync =()=>{
         if(!_initFlag) {
-            if(_adapter._syncReader){
-                _data = _adapter._syncReader(_d)
+            if(_this._adapter.syncReader){
+                _data = _this._adapter.syncReader(_d)
                 _initFlag = true
             }
             else{
@@ -76,7 +81,7 @@ function Sync(D,options){
     }
     this.sync=fn=>{
         if(fn){
-            if(utils.Type.isFunction(fn)){
+            if(!utils.Type.isFunction(fn)){
                 _this.set(fn)
             }else{
                 var maybeResult= fn(_this.getSync())
@@ -92,17 +97,16 @@ function Sync(D,options){
     this.setAdapter = adapter=>{
         //todo validate
         _this._adapter = adapter
+
+        //use orbit
+        orbit.setOrbit(_this._adapter.getName(_d),null,mina=>{
+            if(_this._adapter.writer)
+                _this._adapter.writer(_d,_data)
+            else{
+                console.error("LiSA.sync  you should set Writer")
+            }
+        },_d,options.internal)
     }
-
-
-    //use orbit
-    orbit.setOrbit(_adapter.getName(_d),null,mina=>{
-        if(_adapter._writer)
-            _adapter._writer(_d,_data)
-        else{
-            console.error("LiSA.sync  you should set Writer")
-        }
-    },_d,options.internal)
 }
 
 
@@ -111,7 +115,7 @@ module.exports =(D,options)=>{
     var adapter = io.getAdapter(D)
     if(!map[adapter.getName(D)]){
          var sync = new Sync(D,options) 
-         sync.setAdapter = adapter
+         sync.setAdapter(adapter)
          map[adapter.getName(D)] = sync
     }
     return map[adapter.getName(D)]
