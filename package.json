@@ -21,7 +21,7 @@
   "homepage": "https://github.com/apporoad/LiSA.sync#readme",
   "dependencies": {
     "debug": "^4.1.1",
-    "lisa.orbit": "^1.0.2",
+    "lisa.orbit": "^1.0.3",
     "lisa.utils": "^1.0.0",
     "mkdirp": "^0.5.1"
   }
