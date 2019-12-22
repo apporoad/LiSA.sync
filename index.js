@@ -87,14 +87,12 @@ function Sync(D,options){
             if(!utils.Type.isFunction(fn)){
                 _this.set(fn)
             }else{
-                _this.get().then(da =>{
-                    var maybeResult= fn(da)
-                    if(maybeResult){
-                        _this.set(maybeResult)
-                    }else{
-                        _this.set(_data)
-                    }
-                })
+                var maybeResult= fn(_this.getSync())
+                if(maybeResult){
+                    _this.set(maybeResult)
+                }else{
+                    _this.set(_data)
+                }
             }
         }
     }
