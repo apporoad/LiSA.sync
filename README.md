@@ -1,61 +1,20 @@
 <div align=center><img src="https://raw.githubusercontent.com/apporoad/LiSA.sync/master/docs/logo.png"/></div>
 
 # LiSA.sync
-sync framework for node
+sync framework for node   
+LiSA.sync 不再提供默认的adapter，使用时需要采用ilink方式，使用不同的adapter  
+采用ilink方式时，应用可以动态切换adapter方式，实现同步到不同的数据源  
 
 ## use
-```bash
-npm i --save lisa.sync
-```
+
+[use with lisa.sync.fileadapter](https://github.com/apporoad/LiSA.sync.fileAdapter.js.git)
+
+
+## how to diy your adapter 
 ```js
-var LiSASync = require('lisa.sync')
-
-var LiSA = LiSASync(__dirname + '/test/LiSA.json',{internal : 2000})
-
-console.log(LiSA.getSync())
-
-LiSA.set({ name : "LiSA1" , gender : "girl"})
-
-console.log(LiSA.getSync())
-
-var index =0
-//you can 
-// setInterval(() => {
-//     LiSA.set({ name : "LiSA" , gender : "girl" , index : index++})
-// }, 0);
-
-//or new data
-LiSA.sync(()=>{
-    return {
-        name : "LiSA2"
-    }
-})
-
-console.log(LiSA.getSync())
-
-//you can call sync 
-LiSA.sync(data=>{
-    data.oneNode = { name : "testNode"}
-})
-
-LiSA.get().then(d=>{
-    console.log(d)
-})
-
-//stop sync
-LiSA.stop()
+exports.getId = (D)=>{}
+exports.syncReader = (D) =>{}
+exports.reader = (D)=>{}
+exports.writer = (D,data)=>{}
 ```
-
-## an adapter maybe
-```js
-function Adapter(){
-    this.getName = (D)=>{}
-    this.syncReader = (D) =>{}
-    this.reader = (D)=>{}
-    this.writer = (D,data)=>{}
-}
-```
-
-## todos
-
-need support http resouces
+just have a peek on [lisa.sync.fileadapter](https://github.com/apporoad/LiSA.sync.fileAdapter.js.git)
