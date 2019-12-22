@@ -12,6 +12,8 @@ function Sync(D,options){
     var _d = D
     var _data = null
     var _initFlag = false
+    var _lastChangeTime =null
+
     //var _syncReader = null
     //var _reader = null
     //var _writer = null
@@ -22,16 +24,19 @@ function Sync(D,options){
                 r(_data)
             }else{
                 if(_this._adapter.reader){
+                    var startTime =Date.now()
                     var result = _this._adapter.reader(_d)
                     if(result && result.then){
                         result.then(data=>{
-                            _data = data
+                            if(startTime> _lastChangeTime)
+                                _data = data
                             _initFlag=true
                             r(data)
                         })
                     }
                     else{
-                        _data = result
+                        if(startTime> _lastChangeTime)
+                            _data = result
                         _initFlag = true
                         r(result)
                     }
@@ -46,6 +51,7 @@ function Sync(D,options){
         //support async
         if(value && value.then){
             value.then(data=>{
+                _lastChangeTime = Date.now()
                 _data = data
                 _initFlag = true
                 //into the orbit
@@ -53,6 +59,7 @@ function Sync(D,options){
             })
         }
         else{
+            _lastChangeTime = Date.now()
             _data = value
             _initFlag = true
             //into the orbit
@@ -80,12 +87,14 @@ function Sync(D,options){
             if(!utils.Type.isFunction(fn)){
                 _this.set(fn)
             }else{
-                var maybeResult= fn(_this.getSync())
-                if(maybeResult){
-                    _this.set(maybeResult)
-                }else{
-                    _this.set(_data)
-                }
+                _this.get().then(da =>{
+                    var maybeResult= fn(da)
+                    if(maybeResult){
+                        _this.set(maybeResult)
+                    }else{
+                        _this.set(_data)
+                    }
+                })
             }
         }
     }
