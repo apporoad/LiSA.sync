@@ -1,7 +1,6 @@
 const debug = require('debug')('LiSA.sync')
 const utils = require('lisa.utils')
 const orbit = require("lisa.orbit")
-const io = require('./io')
 
 global.LiSASYNC = global.LiSASYNC || {};
 var map = global.LiSASYNC 
@@ -16,9 +15,6 @@ function Sync(D,options){
     //var _syncReader = null
     //var _reader = null
     //var _writer = null
-    var _adapter = null
-
-    
 
     this.get = ()=>{
         return new Promise((r,j)=>{
@@ -53,18 +49,18 @@ function Sync(D,options){
                 _data = data
                 _initFlag = true
                 //into the orbit
-                orbit.push(_this._adapter.getName(_d))
+                orbit.push(_this._adapter.getId(_d))
             })
         }
         else{
             _data = value
             _initFlag = true
             //into the orbit
-            orbit.push(_this._adapter.getName(_d))
+            orbit.push(_this._adapter.getId(_d))
         }
     }
     this.stop = () => {
-        orbit.stop(_this._adapter.getName(_d))
+        orbit.stop(_this._adapter.getId(_d))
     }
 
     this.getSync =()=>{
@@ -99,7 +95,7 @@ function Sync(D,options){
         _this._adapter = adapter
 
         //use orbit
-        orbit.setOrbit(_this._adapter.getName(_d),null,mina=>{
+        orbit.setOrbit(_this._adapter.getId(_d),null,mina=>{
             if(_this._adapter.writer)
                 _this._adapter.writer(_d,_data)
             else{
@@ -109,14 +105,12 @@ function Sync(D,options){
     }
 }
 
-
-
 module.exports =(D,options)=>{
-    var adapter = io.getAdapter(D)
-    if(!map[adapter.getName(D)]){
+    var adapter = require('./adapter')//io.getAdapter(D)
+    if(!map[adapter.getId(D)]){
          var sync = new Sync(D,options) 
          sync.setAdapter(adapter)
-         map[adapter.getName(D)] = sync
+         map[adapter.getId(D)] = sync
     }
-    return map[adapter.getName(D)]
+    return map[adapter.getId(D)]
 }

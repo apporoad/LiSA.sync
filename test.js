@@ -1,6 +1,6 @@
 var LiSASync = require('./index')
 
-var LiSA = LiSASync(__dirname + '/test/LiSA.json',{internal : 2000})
+var LiSA = LiSASync(__dirname + '/LiSA.json',{internal : 2000})
 
 console.log(LiSA.getSync())
 
