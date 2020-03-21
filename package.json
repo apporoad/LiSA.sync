@@ -1,6 +1,6 @@
 {
   "name": "lisa.sync",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "<div align=center><img src=\"https://raw.githubusercontent.com/apporoad/LiSA.sync/master/docs/logo.png\"/></div>",
   "main": "index.js",
   "directories": {
@@ -23,6 +23,7 @@
     "debug": "^4.1.1",
     "ilink.js": "^1.1.2",
     "lisa.orbit": "^1.0.3",
+    "lisa.sync.fileadapter": "^1.0.0",
     "lisa.utils": "^1.0.0"
   }
 }
