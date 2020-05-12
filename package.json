@@ -23,6 +23,6 @@
     "debug": "^4.1.1",
     "lisa.orbit": "^1.0.3",
     "lisa.sync.fileadapter": "^1.0.0",
-    "lisa.utils": "^1.0.0"
+    "lisa.utils": "^2.0.0"
   }
 }
