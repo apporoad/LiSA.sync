@@ -1,6 +1,6 @@
 {
   "name": "lisa.sync",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "<div align=center><img src=\"https://raw.githubusercontent.com/apporoad/LiSA.sync/master/docs/logo.png\"/></div>",
   "main": "index.js",
   "directories": {
@@ -20,9 +20,10 @@
   },
   "homepage": "https://github.com/apporoad/LiSA.sync#readme",
   "dependencies": {
-    "debug": "^4.1.1",
-    "lisa.orbit": "^1.0.3",
-    "lisa.sync.fileadapter": "^1.0.0",
-    "lisa.utils": "^2.0.0"
+    "lisa.orbit": "^1.0.5",
+    "lisa.utils": "^2.3.0"
+  },
+  "devDependencies": {
+    "debug": "^4.1.1"
   }
 }

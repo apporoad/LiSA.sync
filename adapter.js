@@ -1,6 +1,6 @@
 //require('ilink.js').reg(module,'LiSA.sync')
 
-var adapter = require('lisa.sync.fileadapter')
+var adapter = require('./fileAdapter')
 
 exports.getId= adapter.getId
 exports.syncReader= adapter.syncReader

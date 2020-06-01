@@ -1,4 +1,7 @@
-const debug = require('debug')('LiSA.sync')
+var debug = ()=>{}
+try{
+  debug = require('debug')('LiSA.sync')
+}catch(e){}
 const utils = require('lisa.utils')
 const orbit = require("lisa.orbit")
 
