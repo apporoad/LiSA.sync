@@ -28,7 +28,7 @@ function Sync(D,options){
             }else{
                 if(_this._adapter.reader){
                     var startTime =Date.now()
-                    var result = _this._adapter.reader(_d)
+                    var result = _this._adapter.reader(_d,options)
                     if(result && result.then){
                         result.then(data=>{
                             if(startTime> _lastChangeTime)
@@ -76,7 +76,7 @@ function Sync(D,options){
     this.getSync =()=>{
         if(!_initFlag) {
             if(_this._adapter.syncReader){
-                _data = _this._adapter.syncReader(_d)
+                _data = _this._adapter.syncReader(_d,options)
                 _initFlag = true
             }
             else{
@@ -107,7 +107,7 @@ function Sync(D,options){
         //use orbit
         orbit.setOrbit(_this._adapter.getId(_d),null,mina=>{
             if(_this._adapter.writer)
-                _this._adapter.writer(_d,_data)
+                _this._adapter.writer(_d,_data,options)
             else{
                 console.error("LiSA.sync  you should set Writer")
             }
