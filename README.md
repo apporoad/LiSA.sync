@@ -2,8 +2,8 @@
 
 # LiSA.sync
 sync framework for node   
-LiSA.sync 不再提供默认的adapter，使用时需要采用ilink方式，使用不同的adapter  
-采用ilink方式时，应用可以动态切换adapter方式，实现同步到不同的数据源  
+LiSA.sync 默认的采用 fileAdapter   
+使用不同的adapter时请参考示例
 
 ## phil（哲学）
 
@@ -12,7 +12,43 @@ LiSA.sync 不再提供默认的adapter，使用时需要采用ilink方式，使�
 ## use
 
 [use with lisa.sync.fileadapter](https://github.com/apporoad/LiSA.sync.fileAdapter.js.git)
+```bash
+npm i --save lisa.sync
+```
+```js
+var LiSASync = require('lisa.sync')
 
+var LiSA = LiSASync(__dirname + '/test/LiSA.json',{internal : 2000})
+
+console.log(LiSA.getSync())
+
+LiSA.set({ name : "LiSA1" , gender : "girl"})
+
+console.log(LiSA.getSync())
+
+var index =0
+
+LiSA.sync(()=>{
+    return {
+        name : "LiSA2"
+    }
+})
+
+console.log(LiSA.getSync())
+
+//you can call sync 
+LiSA.sync(data=>{
+    data.oneNode = { name : "testNode"}
+})
+
+LiSA.get().then(d=>{
+    console.log(d)
+})
+
+//stop sync
+LiSA.stop()
+
+```
 
 ## how to diy your adapter 
 ```js
@@ -21,4 +57,15 @@ exports.syncReader = (D) =>{}
 exports.reader = (D)=>{}
 exports.writer = (D,data)=>{}
 ```
-just have a peek on [lisa.sync.fileadapter](https://github.com/apporoad/LiSA.sync.fileAdapter.js.git)
+## use your adapter
+```js
+var LiSASync = require('lisa.sync')
+
+var yourAdapter = require('yourAdapterPath')
+
+var LiSA = LiSASync(__dirname + '/test/LiSA.json',{internal : 2000} , yourAdapter)
+
+```
+just have a peek on [lisa.sync.fileadapter](https://github.com/apporoad/LiSA.sync.fileAdapter.js.git)   
+aok adapter [aok](https://github.com/apporoad/LiSA.sync.aokAdapter.js)  
+csv adapter [csv](https://github.com/apporoad/LiSA.sync.csvAdapter.js)

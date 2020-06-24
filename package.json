@@ -1,6 +1,6 @@
 {
   "name": "lisa.sync",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "description": "<div align=center><img src=\"https://raw.githubusercontent.com/apporoad/LiSA.sync/master/docs/logo.png\"/></div>",
   "main": "index.js",
   "directories": {

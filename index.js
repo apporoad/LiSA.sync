@@ -115,8 +115,8 @@ function Sync(D,options){
     }
 }
 
-module.exports =(D,options)=>{
-    var adapter = require('./adapter')//io.getAdapter(D)
+module.exports =(D,options,adapter)=>{
+    var adapter = adapter || require('./adapter')//io.getAdapter(D)
     if(!map[adapter.getId(D)]){
          var sync = new Sync(D,options) 
          sync.setAdapter(adapter)
