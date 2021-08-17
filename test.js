@@ -35,4 +35,4 @@ LiSA.get().then(d=>{
 })
 
 //stop sync
-LiSA.stop()
+// LiSA.stop()
