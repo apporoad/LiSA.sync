@@ -53,12 +53,16 @@ function Sync(D,options){
     this.set = value =>{
         //support async
         if(value && value.then){
-            value.then(data=>{
-                _lastChangeTime = Date.now()
-                _data = data
-                _initFlag = true
-                //into the orbit
-                orbit.push(_this._adapter.getId(_d))
+            return new Promise((r,j)=>{
+                value.then(data=>{
+                    _lastChangeTime = Date.now()
+                    _data = data
+                    _initFlag = true
+                    //into the orbit
+                    orbit.push(_this._adapter.getId(_d))
+
+                    r(_data)
+                },j)
             })
         }
         else{
@@ -67,6 +71,7 @@ function Sync(D,options){
             _initFlag = true
             //into the orbit
             orbit.push(_this._adapter.getId(_d))
+            return Promise.resolve(_data)
         }
     }
     this.stop = () => {
@@ -88,13 +93,13 @@ function Sync(D,options){
     this.sync=fn=>{
         if(fn){
             if(!utils.Type.isFunction(fn)){
-                _this.set(fn)
+                return _this.set(fn)
             }else{
                 var maybeResult= fn(_this.getSync())
                 if(maybeResult){
-                    _this.set(maybeResult)
+                    return _this.set(maybeResult)
                 }else{
-                    _this.set(_data)
+                    return _this.set(_data)
                 }
             }
         }

@@ -2,9 +2,11 @@ var LiSASync = require('./index')
 
 var LiSA = LiSASync('data',{internal : 2000})
 
+LiSA.set({ name : "LiSA1" , gender : "girl"})
+
 console.log(LiSA.getSync())
 
-LiSA.set({ name : "LiSA1" , gender : "girl"})
+
 
 console.log(LiSA.getSync())
 
