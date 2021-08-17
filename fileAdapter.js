@@ -15,6 +15,9 @@ exports.getId= D=>{
 }
 
 exports.syncReader= D=>{
+    if(!fs.existsSync(D)){
+        fs.writeFileSync(D,"{}","utf8")
+    }
     var content = fs.readFileSync(D,{encoding:"utf8"})
     if(utils.endWith(D,".json") && content){
         try{

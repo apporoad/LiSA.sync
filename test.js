@@ -3,10 +3,10 @@ var LiSASync = require('./index')
 var LiSA = LiSASync(__dirname + '/LiSA.json',{internal : 2000})
 
 
+console.log(LiSA.getSync())
 
 LiSA.set({ name : "LiSA1" , gender : "girl"})
 
-console.log(LiSA.getSync())
 
 console.log(LiSA.getSync())
 
